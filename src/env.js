@@ -1,0 +1,1 @@
+export  const nodehost = "http://localhost:8000";
