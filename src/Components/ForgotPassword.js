@@ -158,18 +158,20 @@ export default function ForgotPassword() {
           >
             Reset Password
           </Button>
-          {/* <Grid container>
-            <Grid item xs={5}>
-              <Link href="#" variant="body2">
-                Forgot password?
+          <Grid container direction="row">
+            <Grid item xs={3} justify="flex-start">
+              <Link href="/signup" variant="body2">
+                SignUp
               </Link>
             </Grid>
-            <Grid item xs={7}>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+            <Grid item xs={6}></Grid>
+            <Grid item xs={3}>
+              <Link href="/signin" variant="body2">
+                SignIn
               </Link>
             </Grid>
-          </Grid> */}
+          </Grid>
+
         </form>
       </div>
       <Box mt={8}>
