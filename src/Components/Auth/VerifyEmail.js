@@ -1,9 +1,9 @@
 import React from 'react';
-import {nodehost} from "../env";
+import {nodehost} from "../../env";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import "../Styles/VerifyEmail.css";
+import "../../Styles/VerifyEmail.css";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 

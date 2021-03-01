@@ -1,0 +1,21 @@
+.data-container{
+    height: 100%;
+    padding: 1vh;
+}
+.fixed-upper{
+    height:12%;
+    border: 2px solid black;
+    border-radius:5px;
+}
+
+.fixed-bottom{
+    height:6%;
+    border: 2px solid black;
+    border-radius:5px;
+}
+
+.data-subcontainer{
+    height:80%;
+    border: 2px solid black;
+    border-radius:5px;
+}

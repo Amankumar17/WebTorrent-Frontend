@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import {nodehost} from '../env';
+import {nodehost} from '../../env';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -64,25 +64,21 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function UpdatePassword() {
+export default function SignIn() {
   const classes = useStyles();
 
-  const url = "http://localhost:3000/updatePassword/?id=9689ab5f4654229a55609b839707627a&emailID=shrivastavaman171@gmail.com";
-
-  const lastSegment = url.split("=").pop();
-//   console.log("Last Segment: ",lastSegment,lastSegment.length);
     
   const formik = useFormik({
     initialValues: {
-      email: lastSegment,
+      email: null,
       password: null
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
-        const url = nodehost+"/api/updatePassword";
+        const url = nodehost+"/api/login";
         const userObj = {
-            emailID:    lastSegment,
+            emailID:    values.email,
             password:   values.password
         }
         console.log("Inside Submit Api Call...!!",userObj,url);
@@ -93,7 +89,7 @@ export default function UpdatePassword() {
       };
       fetch(url, requestOptions)
           .then( (response) => {
-            console.log("Displaying Response",response,response.status);
+            console.log("Displaying Response",response);
           })
           .then(data => console.log(data))
           .catch(error => console.log(error));
@@ -111,7 +107,7 @@ export default function UpdatePassword() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Update Password
+          Sign in
         </Typography>
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <TextField
@@ -127,7 +123,7 @@ export default function UpdatePassword() {
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
-            disabled
+            autoFocus
           />
           <TextField
             variant="outlined"
@@ -143,9 +139,11 @@ export default function UpdatePassword() {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
             autoComplete="current-password"
-            autoFocus
           />
-          
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
           <Button
             type="submit"
             fullWidth
@@ -153,20 +151,20 @@ export default function UpdatePassword() {
             color="primary"
             className={classes.submit}
           >
-            Update Password
+            Sign In
           </Button>
-          {/* <Grid container>
+          <Grid container>
             <Grid item xs={5}>
-              <Link href="#" variant="body2">
+              <Link href="/forgotPassword" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item xs={7}>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
-          </Grid> */}
+          </Grid>
         </form>
       </div>
       <Box mt={8}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import {nodehost} from '../env';
+import {nodehost} from '../../env';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,15 +15,16 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-
 
 const validationSchema = yup.object({
   email: yup
     .string('Enter your email')
     .email('Enter a valid email')
     .required('Email is required'),
+  password: yup
+    .string('Enter your password')
+    .min(8, 'Password should be of minimum 8 characters length')
+    .required('Password is required'),
 });
 
 function Copyright() {
@@ -63,36 +64,26 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function ForgotPassword() {
+export default function UpdatePassword() {
   const classes = useStyles();
 
-  const [state, setState] = React.useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-  });
+  const url = "http://localhost:3000/updatePassword/?id=9689ab5f4654229a55609b839707627a&emailID=shrivastavaman171@gmail.com";
 
-  const { vertical, horizontal, open } = state;
-
-  const handleSnack = (newState) => () => {
-      console.log("In handleclick.");
-    setState({ open: true, ...newState });
-  };
-
-  const handleClose = () => {
-    setState({ ...state, open: false });
-  };
+  const lastSegment = url.split("=").pop();
+//   console.log("Last Segment: ",lastSegment,lastSegment.length);
     
   const formik = useFormik({
     initialValues: {
-      email: null
+      email: lastSegment,
+      password: null
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
-        const url = nodehost+"/api/forgotPassword";
+        const url = nodehost+"/api/updatePassword";
         const userObj = {
-            emailID:    values.email
+            emailID:    lastSegment,
+            password:   values.password
         }
         console.log("Inside Submit Api Call...!!",userObj,url);
         const requestOptions = {
@@ -102,9 +93,9 @@ export default function ForgotPassword() {
       };
       fetch(url, requestOptions)
           .then( (response) => {
-            console.log("Displaying Response",response);  
-            setState({ open: true,vertical: 'top', horizontal: 'center'  }); 
+            console.log("Displaying Response",response,response.status);
           })
+          .then(data => console.log(data))
           .catch(error => console.log(error));
     
     },
@@ -114,23 +105,13 @@ export default function ForgotPassword() {
 
   return (
     <Container component="main" maxWidth="xs">
-        <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        key={vertical + horizontal}
-      ><MuiAlert severity="success">
-          Reset Link has been successfully sent to your registered Email id.
-        </MuiAlert>
-        </Snackbar>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Forgot Password
+          Update Password
         </Typography>
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <TextField
@@ -146,6 +127,22 @@ export default function ForgotPassword() {
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
+            disabled
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+            autoComplete="current-password"
             autoFocus
           />
           
@@ -156,22 +153,20 @@ export default function ForgotPassword() {
             color="primary"
             className={classes.submit}
           >
-            Reset Password
+            Update Password
           </Button>
-          <Grid container direction="row">
-            <Grid item xs={3} justify="flex-start">
-              <Link href="/signup" variant="body2">
-                SignUp
+          {/* <Grid container>
+            <Grid item xs={5}>
+              <Link href="#" variant="body2">
+                Forgot password?
               </Link>
             </Grid>
-            <Grid item xs={6}></Grid>
-            <Grid item xs={3}>
-              <Link href="/signin" variant="body2">
-                SignIn
+            <Grid item xs={7}>
+              <Link href="#" variant="body2">
+                {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
-          </Grid>
-
+          </Grid> */}
         </form>
       </div>
       <Box mt={8}>

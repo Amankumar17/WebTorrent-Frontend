@@ -1,0 +1,12 @@
+.column-header{
+    height: 5vh;
+    background-color: whitesmoke;
+}
+.column-container {
+    height: 80vh;
+    background-color: whitesmoke;
+    margin: 10px !important;
+    border-radius: 25px;
+
+}
+

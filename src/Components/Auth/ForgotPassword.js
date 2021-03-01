@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import {nodehost} from '../env';
+import {nodehost} from '../../env';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,16 +15,15 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
 
 const validationSchema = yup.object({
   email: yup
     .string('Enter your email')
     .email('Enter a valid email')
     .required('Email is required'),
-  password: yup
-    .string('Enter your password')
-    .min(8, 'Password should be of minimum 8 characters length')
-    .required('Password is required'),
 });
 
 function Copyright() {
@@ -64,22 +63,36 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function SignIn() {
+export default function ForgotPassword() {
   const classes = useStyles();
 
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+
+  const { vertical, horizontal, open } = state;
+
+  const handleSnack = (newState) => () => {
+      console.log("In handleclick.");
+    setState({ open: true, ...newState });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
     
   const formik = useFormik({
     initialValues: {
-      email: null,
-      password: null
+      email: null
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
-        const url = nodehost+"/api/login";
+        const url = nodehost+"/api/forgotPassword";
         const userObj = {
-            emailID:    values.email,
-            password:   values.password
+            emailID:    values.email
         }
         console.log("Inside Submit Api Call...!!",userObj,url);
         const requestOptions = {
@@ -89,9 +102,9 @@ export default function SignIn() {
       };
       fetch(url, requestOptions)
           .then( (response) => {
-            console.log("Displaying Response",response);
+            console.log("Displaying Response",response);  
+            setState({ open: true,vertical: 'top', horizontal: 'center'  }); 
           })
-          .then(data => console.log(data))
           .catch(error => console.log(error));
     
     },
@@ -101,13 +114,23 @@ export default function SignIn() {
 
   return (
     <Container component="main" maxWidth="xs">
+        <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      ><MuiAlert severity="success">
+          Reset Link has been successfully sent to your registered Email id.
+        </MuiAlert>
+        </Snackbar>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Forgot Password
         </Typography>
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <TextField
@@ -125,25 +148,7 @@ export default function SignIn() {
             helperText={formik.touched.email && formik.errors.email}
             autoFocus
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+          
           <Button
             type="submit"
             fullWidth
@@ -151,20 +156,22 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Reset Password
           </Button>
-          <Grid container>
-            <Grid item xs={5}>
-              <Link href="/forgotPassword" variant="body2">
-                Forgot password?
+          <Grid container direction="row">
+            <Grid item xs={3} justify="flex-start">
+              <Link href="/signup" variant="body2">
+                SignUp
               </Link>
             </Grid>
-            <Grid item xs={7}>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+            <Grid item xs={6}></Grid>
+            <Grid item xs={3}>
+              <Link href="/signin" variant="body2">
+                SignIn
               </Link>
             </Grid>
           </Grid>
+
         </form>
       </div>
       <Box mt={8}>

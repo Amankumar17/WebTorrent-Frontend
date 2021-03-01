@@ -7,13 +7,14 @@ import {
   Link
 } from "react-router-dom";
 import { fade, makeStyles } from '@material-ui/core/styles';
-import Home from './Home';
-import SignIn from './Components/SignIn';
-import SignUp from './Components/SignUp';
+import Home from './Components/Home';
+import SignIn from './Components/Auth/SignIn';
+import SignUp from './Components/Auth/SignUp';
 import NavBar from './Components/Navbar';
-import VerifyEmail from './Components/VerifyEmail';
-import ForgotPassword from './Components/ForgotPassword';
-import UpdatePassword from './Components/UpdatePassword';
+import VerifyEmail from './Components/Auth/VerifyEmail';
+import ForgotPassword from './Components/Auth/ForgotPassword';
+import UpdatePassword from './Components/Auth/UpdatePassword';
+import Main from './Components/Main/Main';
 import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/verifyEmail"><VerifyEmail/></Route>
                     <Route path="/forgotPassword"><ForgotPassword/></Route>
                     <Route path="/updatePassword"><UpdatePassword/></Route>
+                    <Route path="/main"><Main/></Route>
                     <Route path="/"><Home/></Route>
                     
                   </Switch>
