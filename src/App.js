@@ -16,6 +16,8 @@ import ForgotPassword from './Components/Auth/ForgotPassword';
 import UpdatePassword from './Components/Auth/UpdatePassword';
 import Main from './Components/Main/Main';
 import Grid from '@material-ui/core/Grid';
+import { useCookies } from 'react-cookie';
+
 
 const useStyles = makeStyles((theme) => ({
     gainHeight: {

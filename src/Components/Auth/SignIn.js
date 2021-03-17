@@ -15,6 +15,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
+
+
 
 const validationSchema = yup.object({
   email: yup
@@ -67,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
 
+  const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
     
   const formik = useFormik({
     initialValues: {
@@ -87,13 +92,17 @@ export default function SignIn() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userObj)
       };
-      fetch(url, requestOptions)
-          .then( (response) => {
-            console.log("Displaying Response",response);
-          })
-          .then(data => console.log(data))
-          .catch(error => console.log(error));
-    
+      
+      axios.post(url, userObj)
+      .then(function (response) {
+        console.log(response);
+        setCookie('Web_Torrent_Token', response.data.token);
+        window.location.href = "/main";
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     },
   });
 

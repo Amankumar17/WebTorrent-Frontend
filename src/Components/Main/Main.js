@@ -7,10 +7,24 @@ import Button from '@material-ui/core/Button';
 import ServerRooms from './ServerRooms';
 import ServerParticipants from './ServerParticipants';
 import ServerData from './ServerData';
+import jwt_decode from "jwt-decode";
+import { useCookies ,Cookies } from 'react-cookie';
+
+
 
 export default function Main(){
+    const [cookies, setCookie, removeCookie] = useCookies(['Web_Torrent_Token']);
+    const {Web_Torrent_Token}=cookies;
+    const token=Web_Torrent_Token;
+    // console.log("My tolen :",token);
+    
+    const decode = jwt_decode(token);
+    console.log('My decoded token: ',decode);
+    
     return(
-        
+        <div>
+
+   
             <Grid container direction="row" justify="center" alignItems="stretch" >
                 {/* <Grid className="column-header" sm={11}></Grid> */}
                 <Grid className="column-container" item sm={3} spacing={2}>
@@ -23,7 +37,7 @@ export default function Main(){
                     <ServerParticipants />
                 </Grid>
             </Grid>
-        
+        </div>
     );
 }
 
