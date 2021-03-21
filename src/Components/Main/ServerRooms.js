@@ -16,8 +16,9 @@ import axios from 'axios';
 import { useCookies ,Cookies } from 'react-cookie';
 import jwt_decode from "jwt-decode";
 import {nodehost} from '../../env';
+import {CreateServerModal} from './CreateServerModal';
 
-    
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,20 +43,44 @@ export default function ServerRooms() {
   function getAllRooms(){
     const url = nodehost+"/api/getAllRooms?emailID="+decode.emailID;
     console.log("api url: ", url);
-    axios.get(url)
-  .then(function (response) {
-    // handle success
-    console.log('Allrooms',response);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log("why error",error);
-  })
-  .then(function () {
-    // always executed
-    console.log("in always");
+    
+    // fetch(url)
+    // .then( (response) => {
+    //   console.log("Get Rooms Data : ",response);
+    // }).catch( (error) => {
+    //   console.log("Get Rooms Fetch Error : ",error);
+    // })
+    
+    const userObj = {
+      roomName: 'masti hai mizaz me '
+    }
 
-  });
+    const axiosConfig={
+      withCredentials:true
+    }
+
+    const response= axios.get(url,axiosConfig)
+    .then(response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+    
+  //   axios.get(url)
+  // .then(function (response) {
+  //   // handle success
+  //   console.log('Allrooms',response);
+  // })
+  // .catch(function (error) {
+  //   // handle error
+  //   console.log("why error",error);
+  // })
+  // .then(function () {
+  //   // always executed
+  //   console.log("in always");
+
+  // });
 
     // axios.get('/api/getAllRooms', {
     //     params: {
@@ -74,9 +99,52 @@ export default function ServerRooms() {
 
     //   });
 }
+
+  function CreateRoom(){
+    const url = nodehost+"/api/createRoom?creatorID="+decode.emailID;
+    console.log("api url: ", url);
+
+    
+    const userObj = {
+      roomName: 'masti hai mizaz me '
+    }
+
+    const axiosConfig={
+      withCredentials:true
+    }
+
+    axios.post(url,userObj,axiosConfig)
+    .then(response=>{
+      console.log(response)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+    // const requestOptions = {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(userObj)
+    // };
+
+    // fetch(url, requestOptions)
+    // .then( (response) => {
+    //   console.log("Displaying Response",response,response.status);
+    // })
+    // .then(data => console.log("fetch data: ",data))
+    // .catch(error => console.log("fetch error: ",error));
+
+    // axios.post(url, {
+    //   creatorID: 'shrivastavaman171@gmail.com'
+    // })
+    // .then((response) => {
+    //   console.log(response);
+    // }, (error) => {
+    //   console.log("Crate Error:" ,error);
+    // });
+  }
+
   return (
       <div>
-        {getAllRooms()}
         <br/>
         <List className={classes.root}>
             <ListItem>
