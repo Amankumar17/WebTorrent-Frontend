@@ -23,8 +23,6 @@ export default function Main(){
     
     return(
         <div>
-
-   
             <Grid container direction="row" justify="center" alignItems="stretch" >
                 {/* <Grid className="column-header" sm={11}></Grid> */}
                 <Grid className="column-container" item sm={3} spacing={2}>
