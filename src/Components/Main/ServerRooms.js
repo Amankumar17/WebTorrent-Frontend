@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import {useEffect} from 'react'
 
 const validationSchema = yup.object({
   firstName: yup.string()
@@ -99,7 +100,14 @@ export default function ServerRooms() {
 
     const abc = React.useRef(null);
     
+    const [username,setUserName]=React.useState('No User')
 
+    useEffect(async()=>{
+      setUserName(decode.firstName+" "+decode.lastName) 
+      setServerRooms(await getAllRooms())
+    },[])
+
+    
   const handleOpen = () => {
     setOpen(true);
   };
@@ -112,30 +120,27 @@ export default function ServerRooms() {
       alert("asdfgh");
     }
 
-    function getAllRooms(){
+    async function getAllRooms(){
       const url = nodehost+"/api/getAllRooms?emailID="+decode.emailID;
       console.log("api url: ", url);
       
       const userObj = {
         roomName: 'masti hai mizaz me '
       }
-  
+      
       const axiosConfig={
         withCredentials:true
       }
-  
-      axios.get(url,axiosConfig)
-      .then(response => {
-        setServerRooms(response.data);
-        console.log("serverRooms",response);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  
+      
+      
+      return await (await axios.get(url,axiosConfig)).data.allRooms;
     }
+  
 
   function CreateRoom(){
+
+    
+
     const url = nodehost+"/api/createRoom?creatorID="+decode.emailID;
     console.log("api url: ", url, abc.current.value, abc.value);
 
@@ -158,6 +163,8 @@ export default function ServerRooms() {
     handleClose();
   }
 
+  const demoServerName=["Server A","Server B","Server C"]
+
   // const dateList = baskets.map((basket) => {
   //   return (
   //     <li
@@ -168,6 +175,9 @@ export default function ServerRooms() {
 
   return (
       <div>
+
+kya bhai 
+
         
         <br/>
         <List className={classes.root}>
@@ -177,14 +187,44 @@ export default function ServerRooms() {
                         A
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="UserName" />
+                <ListItemText primary={username} />
             </ListItem>
         </List>
 
         <Typography> Backup Servers </Typography>
               {/* { getAllRooms() */}
-                
+            
+        <List className={classes.root}>
+          
+          {
+            serverRooms.map(everyServer=>(
         
+            
+                <ListItem button id={everyServer.roomID} >
+                    <ListItemAvatar>
+                        <Avatar alt="Remy Sharp" src="" className={classes.orange}>
+                            A
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={everyServer.roomName} />
+                </ListItem>
+                
+            ))
+          }
+        </List>
+
+        {/* Ye neeche wala code chala */}
+        {/* <ul>
+          {
+            demoServerName.map(everyServer=>(
+              
+              <li key={everyServer}>{everyServer}</li>
+              
+            ))
+          }
+        </ul> */}
+
+
         <List className={classes.root}>
             {}
             <ListItem button>
@@ -215,6 +255,7 @@ export default function ServerRooms() {
             </ListItem>
             <Divider variant="inset" component="li" />
         </List>
+
         <br/>
         <Button
         variant="contained"
