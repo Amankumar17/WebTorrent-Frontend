@@ -60,9 +60,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-
-
 export default function ForgotPassword() {
   const classes = useStyles();
 
@@ -75,7 +72,7 @@ export default function ForgotPassword() {
   const { vertical, horizontal, open } = state;
 
   const handleSnack = (newState) => () => {
-      console.log("In handleclick.");
+    console.log("In handleclick.");
     setState({ open: true, ...newState });
   };
 

@@ -20,6 +20,16 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import { useSpring, animated } from 'react-spring/web.cjs';
 import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
+const validationSchema = yup.object({
+  firstName: yup.string()
+     .min(2, 'Too Short!')
+     .max(50, 'Too Long!')
+     .required('Required'),
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,8 +87,18 @@ export default function ServerRooms() {
 
     const [open, setOpen] = React.useState(false);
 
-    const [serverData, setServerData] = React.useState('')
+    const [serverData, setServerData] = React.useState('');
 
+    const[serverRooms, setServerRooms] = React.useState([]);
+
+    const [cookies, setCookie, removeCookie] = useCookies(['Web_Torrent_Token']);
+    const {Web_Torrent_Token}=cookies;
+    const token=Web_Torrent_Token;
+
+    const decode = jwt_decode(token);
+
+    const abc = React.useRef(null);
+    
 
   const handleOpen = () => {
     setOpen(true);
@@ -88,13 +108,9 @@ export default function ServerRooms() {
     setOpen(false);
   };
 
-    const [cookies, setCookie, removeCookie] = useCookies(['Web_Torrent_Token']);
-    const {Web_Torrent_Token}=cookies;
-    const token=Web_Torrent_Token;
-
-    const decode = jwt_decode(token);
-    
-    console.log("My tolen :",decode.emailID);
+    function sample(){
+      alert("asdfgh");
+    }
 
     function getAllRooms(){
       const url = nodehost+"/api/getAllRooms?emailID="+decode.emailID;
@@ -110,8 +126,8 @@ export default function ServerRooms() {
   
       axios.get(url,axiosConfig)
       .then(response => {
-        setServerData(response.data);
-        console.log(response);
+        setServerRooms(response.data);
+        console.log("serverRooms",response);
       })
       .catch(err => {
         console.log(err);
@@ -121,11 +137,10 @@ export default function ServerRooms() {
 
   function CreateRoom(){
     const url = nodehost+"/api/createRoom?creatorID="+decode.emailID;
-    console.log("api url: ", url);
+    console.log("api url: ", url, abc.current.value, abc.value);
 
-    
     const userObj = {
-      roomName: 'masti hai mizaz me '
+      roomName: abc.current.value
     }
 
     const axiosConfig={
@@ -134,36 +149,26 @@ export default function ServerRooms() {
 
     axios.post(url,userObj,axiosConfig)
     .then(response=>{
-      console.log(response)
+      console.log(response); 
+
     })
     .catch(err=>{
       console.log(err)
     })
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(userObj)
-    // };
-
-    // fetch(url, requestOptions)
-    // .then( (response) => {
-    //   console.log("Displaying Response",response,response.status);
-    // })
-    // .then(data => console.log("fetch data: ",data))
-    // .catch(error => console.log("fetch error: ",error));
-
-    // axios.post(url, {
-    //   creatorID: 'shrivastavaman171@gmail.com'
-    // })
-    // .then((response) => {
-    //   console.log(response);
-    // }, (error) => {
-    //   console.log("Crate Error:" ,error);
-    // });
+    handleClose();
   }
+
+  // const dateList = baskets.map((basket) => {
+  //   return (
+  //     <li
+  //         key={basket.id}>{basket.formatted_date}
+  //     </li>
+  //   )
+  // });
 
   return (
       <div>
+        
         <br/>
         <List className={classes.root}>
             <ListItem>
@@ -179,9 +184,9 @@ export default function ServerRooms() {
         <Typography> Backup Servers </Typography>
               {/* { getAllRooms() */}
                 
-              
-         
+        
         <List className={classes.root}>
+            {}
             <ListItem button>
                 <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src="" className={classes.orange}>
@@ -208,6 +213,7 @@ export default function ServerRooms() {
                 </ListItemAvatar>
                 <ListItemText primary="Backup Server C" secondary="July 20, 2014" />
             </ListItem>
+            <Divider variant="inset" component="li" />
         </List>
         <br/>
         <Button
@@ -221,6 +227,7 @@ export default function ServerRooms() {
         Add New Server
       </Button>
 
+      
       <Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
@@ -235,9 +242,26 @@ export default function ServerRooms() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="spring-modal-title">Spring modal</h2>
-            <p id="spring-modal-description">react-spring animates me.</p>
+            <h2 id="spring-modal-title">Create New Server</h2>
+            <input type="text" placeholder="sname" ref={abc}></input>
+            {/* <TextField
+              type="text"
+              label="Server-Name"
+              id="serverName"
+              className={classes.textField}
+              margin="normal"
+              variant="outlined"
+              ref={abc}
+            /> */}
+            <br/>
+            <br/>
+            <center>
+            <Button variant="contained" color="primary" onClick={CreateRoom} >
+              Create Server
+            </Button>
+            </center>
           </div>
+
         </Fade>
       </Modal>
     </div>
