@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -24,6 +24,9 @@ import TextField from '@material-ui/core/TextField';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {useEffect} from 'react'
+
+import SelectedServerContext from './Main'
+import {fetchParticipants} from './controller/FetchServerParticipants'
 
 const validationSchema = yup.object({
   firstName: yup.string()
@@ -84,6 +87,9 @@ Fade.propTypes = {
 
 export default function ServerRooms() {
 
+    let selectedServer=React.useContext(SelectedServerContext)
+
+    console.log("Selected server :",selectedServer)
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
@@ -173,12 +179,15 @@ export default function ServerRooms() {
   //   )
   // });
 
+  async function setSelectedSever(serverID){
+    console.log("Triggered")
+    selectedServer=serverID
+    console.log(selectedServer)
+    fetchParticipants(selectedServer)
+  }
+
   return (
       <div>
-
-kya bhai 
-
-        
         <br/>
         <List className={classes.root}>
             <ListItem>
@@ -206,7 +215,7 @@ kya bhai
                             A
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={everyServer.roomName} />
+                    <ListItemText onClick={()=>{setSelectedSever(everyServer.roomID)}} primary={everyServer.roomName} />
                 </ListItem>
                 
             ))

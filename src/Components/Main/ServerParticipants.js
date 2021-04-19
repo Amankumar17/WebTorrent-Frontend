@@ -20,7 +20,7 @@ import axios from 'axios';
 import { useCookies ,Cookies } from 'react-cookie';
 import jwt_decode from "jwt-decode";
 import TextField from '@material-ui/core/TextField';
-
+import {SelectedServerContext} from './Main'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -66,6 +66,9 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   });
 
 export default function ServerParticipants() {
+
+  let serverSelected=React.useContext(SelectedServerContext)
+  console.log("I am inside ServerParticpants :",serverSelected)
 
   const classes = useStyles();
 

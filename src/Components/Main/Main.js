@@ -11,6 +11,7 @@ import jwt_decode from "jwt-decode";
 import { useCookies ,Cookies } from 'react-cookie';
 
 
+export let SelectedServerContext=React.createContext(null)
 
 export default function Main(){
     const [cookies, setCookie, removeCookie] = useCookies(['Web_Torrent_Token']);
@@ -23,18 +24,20 @@ export default function Main(){
     
     return(
         <div>
-            <Grid container direction="row" justify="center" alignItems="stretch" >
-                {/* <Grid className="column-header" sm={11}></Grid> */}
-                <Grid className="column-container" item sm={3} spacing={2}>
-                    <ServerRooms/>
+            <SelectedServerContext.Provider value={""}>
+                <Grid container direction="row" justify="center" alignItems="stretch" >
+                    {/* <Grid className="column-header" sm={11}></Grid> */}
+                    <Grid className="column-container" item sm={3} spacing={2}>
+                        <ServerRooms/>
+                    </Grid>
+                    <Grid className="column-container" item sm={6}>
+                        <ServerData/>
+                    </Grid>
+                    <Grid className="column-container" item sm={2}>
+                        <ServerParticipants />
+                    </Grid>
                 </Grid>
-                <Grid className="column-container" item sm={6}>
-                    <ServerData/>
-                </Grid>
-                <Grid className="column-container" item sm={2}>
-                    <ServerParticipants />
-                </Grid>
-            </Grid>
+            </SelectedServerContext.Provider>
         </div>
     );
 }
